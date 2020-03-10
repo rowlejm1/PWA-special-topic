@@ -1,11 +1,12 @@
 const staticCacheName = 'site-static-v7';
-const dynamicCacheName = 'site-dynamic-v5';
+const dynamicCacheName = 'site-dynamic-v7';
 const assets = [
     '/',
     '/index.html',
     '/pages/fallback.html',
     '/js/app.js',
     '/js/ui.js',
+    '/js/auth.js',
     '/js/materialize.min.js',
     '/css/styles.css',
     '/css/materialize.min.css',
