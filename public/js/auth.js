@@ -23,12 +23,61 @@ addApplication.addEventListener('submit', (e) => {
     title: addApplication['title'].value,
     ingredients: addApplication['ingredients'].value
   }).then(() => {
+    let clientID = "application-registerer";
+    let uri = "https://app.getpostman.com/oauth2/callback";
+    let basic = "YXBwbGljYXRpb24tcmVnaXN0ZXJlcjpkdWJYZ2tXZDJfQkppMUNOdUhIR2swaEc0Sl83RGZ2VERPcEhhZ3lTa3dQQ0l2eFc2Um53RUxGVw=="
+
+    fetch(`https://account.thethingsnetwork.org/users/token`,{
+      method: "post",
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${basic}`
+      },
+      body: JSON.stringify({
+        grant_type: "refresh_token",
+        refresh_token: "KFZ3s7aZ6BxnbsGZ4xhcO6xTmxWtK5Oxc5RRMRJiNwI",
+        redirect_uri: `${uri}`
+      }) 
+    }).then(res => res.json())
+    .then(data => {      
+      let refresh_token = data["refresh_token"];
+      let access_token = data["access_token"];
+
+      // update db with refresh token
+      updateRefreshToken(refresh_token);
+
+      fetch(`https://account.thethingsnetwork.org/applications`,{
+        method: "post",
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify({
+          id: "unique_name_of_app",
+          name: "Some kind of description for the app"
+        }) 
+      }).then(response => response.json())
+      .then(d => {
+        console.log(d) //was the creation of a new app successful?????????
+      });
+    })
+  }).then(() => {
     // reset form
     addApplication['title'].value = '';
     addApplication['ingredients'].value = '';
   }).catch(err => {
     console.log(err.message);
   })
+})
+
+const updateRefreshToken = (token) => {
+  db.collection('refresh-token').doc('rtoken').update({
+    "token": `${token}`
+  })
+}
+
+document.getElementById("test-btn").addEventListener('click', () => {
+  updateRefreshToken("newToken");
 })
 
 // delete a recipe

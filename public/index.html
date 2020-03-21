@@ -68,18 +68,24 @@
     </a>
   </div>
 
+  <div class="center">
+    <a class="btn-floating btn-small add-btn" id="test-btn">
+      <i class="material-icons">warning</i>
+    </a>
+  </div>
+
   <!-- add recipe side nav -->
   <div id="side-form" class="sidenav side-form">
     <form class="add-recipe container section" id="add-app-form">
-      <h6>New Recipe</h6>
+      <h6>New Application</h6>
       <div class="divider"></div>
       <div class="input-field">
-        <input placeholder="e.g. Ninja soup" id="title" type="text" class="validate">
-        <label for="title">Recipe Title</label>
+        <input placeholder="e.g. unique_identifier" id="title" type="text" class="validate" required="" aria-required="true">
+        <label for="title">App ID</label>
       </div>
       <div class="input-field">
-        <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" class="validate">
-        <label for="ingredients">Ingredients</label>
+        <input placeholder="e.g. Cool App" id="ingredients" type="text" class="validate" required="" aria-required="true">
+        <label for="ingredients">App Name</label>
       </div>
       <div class="input-field center">
         <button class="btn-small">Add</button>
@@ -150,48 +156,6 @@
   const db = firebase.firestore();
   const auth = firebase.auth();
   firebase.analytics();
-
-  //things to do
-  //global refresh_token -> get and save to db
-
-  document.getElementById("special-btn").addEventListener('click', () => {
-    let clientID = "application-registerer";
-    let uri = "https://app.getpostman.com/oauth2/callback";
-    let basic = "YXBwbGljYXRpb24tcmVnaXN0ZXJlcjpkdWJYZ2tXZDJfQkppMUNOdUhIR2swaEc0Sl83RGZ2VERPcEhhZ3lTa3dQQ0l2eFc2Um53RUxGVw=="
-
-    fetch(`https://account.thethingsnetwork.org/users/token`,{
-      method: "post",
-      headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Basic ${basic}`
-      },
-      body: JSON.stringify({
-        grant_type: "refresh_token",
-        refresh_token: "KFZ3s7aZ6BxnbsGZ4xhcO6xTmxWtK5Oxc5RRMRJiNwI",
-        redirect_uri: "https://app.getpostman.com/oauth2/callback"
-      }) 
-    }).then(res => res.json())
-    .then(data => {      
-      let refresh_token = data["refresh_token"];
-      let access_token = data["access_token"];
-
-      fetch(`https://account.thethingsnetwork.org/applications`,{
-        method: "post",
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-        },
-        body: JSON.stringify({
-          id: "unique_name_of_app",
-          name: "Some kind of description for the app"
-        }) 
-      }).then(response => response.json())
-      .then(d => {
-        console.log(d) //was the creation of a new app successful?????????
-      });
-    })
-
-  })
   </script>
   <script src="/js/app.js"></script>
   <script src="/js/db.js"></script>
