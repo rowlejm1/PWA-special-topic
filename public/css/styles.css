@@ -73,3 +73,13 @@ input{
 form .input-field{
   margin-top: 30px;
 }
+
+/* custom */
+.btn-small{
+  background: var(--title) !important;
+  box-shadow: 1px 1px 3px rgba(90,90,90,0.2);
+}
+
+.btn-link{
+  color: white;
+}

@@ -1,9 +1,10 @@
-const staticCacheName = 'site-static-v7';
-const dynamicCacheName = 'site-dynamic-v7';
+const staticCacheName = 'site-static-v21';
+const dynamicCacheName = 'site-dynamic-v17';
 const assets = [
     '/',
     '/index.html',
     '/pages/fallback.html',
+    '/pages/add-device.html',
     '/js/app.js',
     '/js/ui.js',
     '/js/auth.js',

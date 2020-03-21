@@ -1,9 +1,43 @@
 // listen for auth status changes
 auth.onAuthStateChanged(user => {
     if (user) {
-        console.log('user logged in: ', user)
+      db.collection('datasets').onSnapshot(snapshot => {
+        setupData(snapshot.docs, user)
+        setupUI(user);
+      }, err => {
+        console.log(err.message);
+      });
     } else {
-        console.log('user logged out')
+        setupData([]);
+        setupUI();
+    }
+});
+
+// create new application
+const addApplication = document.querySelector('#add-app-form');
+addApplication.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  db.collection('datasets').add({
+    user: auth.currentUser.uid,
+    title: addApplication['title'].value,
+    ingredients: addApplication['ingredients'].value
+  }).then(() => {
+    // reset form
+    addApplication['title'].value = '';
+    addApplication['ingredients'].value = '';
+  }).catch(err => {
+    console.log(err.message);
+  })
+})
+
+// delete a recipe
+const recipeContainer = document.querySelector('.recipes');
+recipeContainer.addEventListener('click', (e) => {
+
+    if(e.target.tagName === 'I') {
+        const id = e.target.getAttribute('data-id');
+        db.collection('datasets').doc(id).delete();
     }
 });
 
