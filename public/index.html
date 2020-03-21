@@ -62,6 +62,12 @@
     </a>
   </div>
 
+  <div class="center">
+    <a class="btn-floating btn-small add-btn" id="special-btn">
+      <i class="material-icons">check</i>
+    </a>
+  </div>
+
   <!-- add recipe side nav -->
   <div id="side-form" class="sidenav side-form">
     <form class="add-recipe container section" id="add-app-form">
@@ -144,6 +150,48 @@
   const db = firebase.firestore();
   const auth = firebase.auth();
   firebase.analytics();
+
+  //things to do
+  //global refresh_token -> get and save to db
+
+  document.getElementById("special-btn").addEventListener('click', () => {
+    let clientID = "application-registerer";
+    let uri = "https://app.getpostman.com/oauth2/callback";
+    let basic = "YXBwbGljYXRpb24tcmVnaXN0ZXJlcjpkdWJYZ2tXZDJfQkppMUNOdUhIR2swaEc0Sl83RGZ2VERPcEhhZ3lTa3dQQ0l2eFc2Um53RUxGVw=="
+
+    fetch(`https://account.thethingsnetwork.org/users/token`,{
+      method: "post",
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${basic}`
+      },
+      body: JSON.stringify({
+        grant_type: "refresh_token",
+        refresh_token: "KFZ3s7aZ6BxnbsGZ4xhcO6xTmxWtK5Oxc5RRMRJiNwI",
+        redirect_uri: "https://app.getpostman.com/oauth2/callback"
+      }) 
+    }).then(res => res.json())
+    .then(data => {      
+      let refresh_token = data["refresh_token"];
+      let access_token = data["access_token"];
+
+      fetch(`https://account.thethingsnetwork.org/applications`,{
+        method: "post",
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+        },
+        body: JSON.stringify({
+          id: "unique_name_of_app",
+          name: "Some kind of description for the app"
+        }) 
+      }).then(response => response.json())
+      .then(d => {
+        console.log(d) //was the creation of a new app successful?????????
+      });
+    })
+
+  })
   </script>
   <script src="/js/app.js"></script>
   <script src="/js/db.js"></script>
