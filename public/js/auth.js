@@ -23,6 +23,7 @@ addApplication.addEventListener('submit', (e) => {
     title: addApplication['title'].value,
     ingredients: addApplication['ingredients'].value
   }).then(() => {
+    // TTN API REQUEST
     let clientID = "application-registerer";
     let uri = "https://app.getpostman.com/oauth2/callback";
     let basic = "YXBwbGljYXRpb24tcmVnaXN0ZXJlcjpkdWJYZ2tXZDJfQkppMUNOdUhIR2swaEc0Sl83RGZ2VERPcEhhZ3lTa3dQQ0l2eFc2Um53RUxGVw=="
@@ -43,7 +44,7 @@ addApplication.addEventListener('submit', (e) => {
       let refresh_token = data["refresh_token"];
       let access_token = data["access_token"];
 
-      // update db with refresh token
+      // UPDATE DB WITH REFRESH TOKEN
       updateRefreshToken(refresh_token);
 
       fetch(`https://account.thethingsnetwork.org/applications`,{
@@ -70,15 +71,17 @@ addApplication.addEventListener('submit', (e) => {
   })
 })
 
+// Update current valid refresh token
 const updateRefreshToken = (token) => {
   db.collection('refresh-token').doc('rtoken').update({
     "token": `${token}`
   })
 }
 
-document.getElementById("test-btn").addEventListener('click', () => {
-  updateRefreshToken("newToken");
-})
+// TEST FOR STORING REFRESH TOKEN
+// document.getElementById("test-btn").addEventListener('click', () => {
+//   updateRefreshToken("newToken");
+// })
 
 // delete a recipe
 const recipeContainer = document.querySelector('.recipes');
